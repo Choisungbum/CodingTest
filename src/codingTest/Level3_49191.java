@@ -11,7 +11,7 @@ public class Level3_49191 {
 		
 //		System.out.println(nodeIndex + " -> " ); // 방문 노드 출력 
 		for(int i = 0; i < copy[nodeIndex].length; i++)
-			if (!visited[nodeIndex]) {
+			if (!visited[copy[nodeIndex][i]]) {
 				int node = copy[nodeIndex][i];
 				result[idx][i] = node;
 				dfs(node, visited, copy, result);
@@ -37,6 +37,7 @@ public class Level3_49191 {
 		}
 		for (int i = 1; i < results.length + 1; i++) {
 			dfs(i, visited, copy, result);
+			Arrays.fill(visited, false);
 		} // 
 		
 		for (int i = 1; i < results.length + 1; i++) {
