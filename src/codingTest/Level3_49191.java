@@ -1,63 +1,49 @@
 package codingTest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class Level3_49191 {
-	static int idx = 0;
-	static List<Integer> dfs(int nodeIndex, boolean[] visited, Map<Integer, List<Integer>> graph, List<Integer> list) {
-		visited[nodeIndex] = true;
-		System.out.println(nodeIndex + " -> ");
-		List<Integer> node = graph.get(nodeIndex);
-//		List<Integer> list = new ArrayList<Integer>();
-		if (node == null) return list;
-		
-		for (int i : node) {
-//			list.add(nodeIndex);
-			if(!visited[i]) {
-				list.add(i);
-				dfs(i, visited, graph, list);
-				visited[i] = false;
-			}
+	private int countForward(int u, boolean[][] graph, boolean[] isVisited) {
+		int count = 1;
+		for (int v = 0; v < graph[u].length; v++) {
+			// 진행할 수 있는지 검사 후 진행
+			if (!graph[u][v] || isVisited[v]) continue;
+			//진행
+			isVisited[v] = true;
+			count += countForward(v, graph, isVisited);
 		}
-		System.out.println("end");
-		return list;
+		
+		return count;
+	}
+	private int countBackward(int u, boolean[][] graph, boolean[] isVisited) {
+		int count = 1;
+		for (int v = 0; v < graph.length; v++) {
+			// 진행할 수 있는지 검사 후 진행
+			if (!graph[v][u] || isVisited[v]) continue;
+			//진행
+			isVisited[v] = true;
+			count += countBackward(v, graph, isVisited);
+		}
+		
+		return count;
 	}
 	
 	public int solution(int n, int[][] results) {
-		boolean[] visited = new boolean[results.length + 1]; // 방문처리 
-		List<List<Integer>> answerlist = new ArrayList<>();
-		Map<Integer, List<Integer>> graph = new HashMap<>();
+		boolean[][] graph = new boolean[n][n];
+		for (int[] edge : results) {
+			int u = edge[0] - 1;
+			int v = edge[1] - 1;
+			graph[u][v] = true;
+		}
 		
-		for (int i = 0; i < results.length; i++) {
-			if (graph.get(results[i][0]) == null) {
-				List<Integer> node = new ArrayList<>();
-				node.add(results[i][1]);
-				graph.put(results[i][0], node);
-			} else {
-				graph.get(results[i][0]).add(results[i][1]);
+		int count = 0;
+		for (int u = 0; u < n; u++) {
+			int wins = countForward(u, graph, new boolean[n]) - 1;
+			int loses = countBackward(u, graph, new boolean[n]) - 1;
+			if (wins + loses + 1== n) {
+				count++;
 			}
 		}
 		
-		for (int i : graph.keySet()) {
-			System.out.println(i);
-		}
-		
-		for (List<Integer> list : graph.values()) {
-			System.out.println(list.toString());
-		}
-		for (int i : graph.keySet()) {
-			List<Integer> list = new ArrayList<Integer>();
-			list.add(i);
-			answerlist.add(dfs(i, visited, graph, list));
-			Arrays.fill(visited, false);
-		}
-		
-        int answer = 0;
-        return answer;
+        return count;
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
