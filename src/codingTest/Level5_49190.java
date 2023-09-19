@@ -21,34 +21,43 @@ public class Level5_49190 {
     	int[] dx = new int[] {0, 1, 1, 1, 0, -1, -1, -1}; // x 변화량
     	int[] dy = new int[] {1, 1, 0, -1, -1, -1, 0, 1}; // y 변화량
     	List<Point> list = new ArrayList<Point>();
+    	List<Point> left = new ArrayList<Point>();
+    	List<Point> right = new ArrayList<Point>();
     	Point point = new Point(0, 0);
-    	int max_x = 0;
-    	int max_y = 0;
-    	int min_x = 0;
-    	int min_y = 0;
-    	
-    	for (int i : arrows) {
-    		point.move(dx[i], dy[i]);
-    		max_x = Integer.max(max_x, point.x);
-    		max_y = Integer.max(max_y, point.y);
-    		min_x = Integer.min(min_x, point.x);
-    		min_y = Integer.min(min_y, point.y);
-    		System.out.println("x : " + point.x);
-    		System.out.println("y : " + point.y);
-    		System.out.println("--------------");
-    		
+//    	for (int i : arrows) {
+//    		point.move(dx[i], dy[i]);
+//    		max_x = Integer.max(max_x, point.x);
+//    		max_y = Integer.max(max_y, point.y);
+//    		min_x = Integer.min(min_x, point.x);
+//    		min_y = Integer.min(min_y, point.y);
+//    		System.out.println("x : " + point.x);
+//    		System.out.println("y : " + point.y);
+//    		System.out.println("--------------");
+//    		
+//    		list.add(point);
+//    	}
+    	for (int i = 0; i < arrows.length; i++) {
+    		point.move(dx[arrows[i]], dy[arrows[i]]);
     		list.add(point);
-    	}
-    	
-    	int[][] graph = new int[max_y - min_y][max_x - min_x];
-    	System.out.println("x : " + max_x);
-		System.out.println("y : " + max_y);
-		System.out.println("x : " + min_x);
-		System.out.println("y : " + min_y);
-		
-		for (int i = 0; i < graph.length; i++) {
+//    		System.out.println(list.get(i).x +" /list/ "+list.get(i).y);
+    		
+    		if (i == 0) {
+    			switch(arrows[i]) {
+    			case 1, 2, 3 -> right.add(new Point(0,0));
+    			case 5, 6, 7 -> left.add(new Point(0,0));  
+    			}
+    			continue;
+    		}
+    		
+    		int direct = (arrows[i] - arrows[i - 1]) % 8;
+			switch(direct) {
+			case 1, 2, 3 -> {right.add(point);}
+			case -1, -2, -3 -> {left.add(point);}  
+			}
 			
-		}
+			
+    		
+    	}
         int answer = 0;
         return answer;
     }
