@@ -1,65 +1,45 @@
 package codingTest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Level5_49190 {
-	private class Point {
-		int x;
-		int y;
-		public Point(int x, int y) {
+	private static class Vertex {
+		public final int x;
+		public final int y;
+		public final String id;
+		public final Set<String> connectedVertices;
+
+		public Vertex (int x, int y) {
 			this.x = x;
 			this.y = y;
+			this.id = id(x, y);
+			this.connectedVertices = new HashSet<>();
 		}
-		
-		public void move(int x, int y) {
-			this.x = this.x + x;
-			this.y = this.y + y;
+
+		public static String id(int x, int y) {
+			return String.format("(%d, %d)", x, y);
 		}
 	}
+	
+	private static final int[] dx = new int[] {0, 1, 1, 1, 0, -1, -1, -1}; // x 변화량
+	private static final int[] dy = new int[] {1, 1, 0, -1, -1, -1, 0, 1}; // y 변화량
+	
     public int solution(int[] arrows) {
-    	int[] dx = new int[] {0, 1, 1, 1, 0, -1, -1, -1}; // x 변화량
-    	int[] dy = new int[] {1, 1, 0, -1, -1, -1, 0, 1}; // y 변화량
-    	List<Point> list = new ArrayList<Point>();
-    	List<Point> left = new ArrayList<Point>();
-    	List<Point> right = new ArrayList<Point>();
-    	Point point = new Point(0, 0);
-//    	for (int i : arrows) {
-//    		point.move(dx[i], dy[i]);
-//    		max_x = Integer.max(max_x, point.x);
-//    		max_y = Integer.max(max_y, point.y);
-//    		min_x = Integer.min(min_x, point.x);
-//    		min_y = Integer.min(min_y, point.y);
-//    		System.out.println("x : " + point.x);
-//    		System.out.println("y : " + point.y);
-//    		System.out.println("--------------");
-//    		
-//    		list.add(point);
-//    	}
-    	for (int i = 0; i < arrows.length; i++) {
-    		point.move(dx[arrows[i]], dy[arrows[i]]);
-    		list.add(point);
-//    		System.out.println(list.get(i).x +" /list/ "+list.get(i).y);
-    		
-    		if (i == 0) {
-    			switch(arrows[i]) {
-    			case 1, 2, 3 -> right.add(new Point(0,0));
-    			case 5, 6, 7 -> left.add(new Point(0,0));  
-    			}
-    			continue;
-    		}
-    		
-    		int direct = (arrows[i] - arrows[i - 1]) % 8;
-			switch(direct) {
-			case 1, 2, 3 -> {right.add(point);}
-			case -1, -2, -3 -> {left.add(point);}  
-			}
-			
-			
-    		
+    	int count = 0;
+    	Map<String, Vertex> vertices = new HashMap<>();
+    	
+    	// 개수 세기
+    	for (int d : arrows) {
+    		int x = v.x + dx[d];
+    		int y = v.y + dy[d];
     	}
-        int answer = 0;
-        return answer;
+    	
+    	return count;
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
