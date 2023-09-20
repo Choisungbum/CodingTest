@@ -37,6 +37,7 @@ public class Level5_49190 {
     	for (int d : arrows) {
     		int x = v.x + dx[d];
     		int y = v.y + dy[d];
+    		String id = Vertex.id(x, y);
     	}
     	
     	return count;
