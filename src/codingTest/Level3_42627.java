@@ -1,5 +1,6 @@
 package codingTest;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -7,22 +8,14 @@ import java.util.PriorityQueue;
 public class Level3_42627 {
 	public int solution(int[][] jobs) {
 		int  result = 0;
-		int rqstTime = 0;
-		int oprtTime = 0;
+		int[] job = new int[jobs.length];
 		
-		PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> (jobs[a][1] - jobs[b][1]));
 		for (int i = 0; i < jobs.length;i++) {
-			pq.add(i);
+			job[i] = i;
 		}
-		for (int i = 0; i < jobs.length;i++) {
-			int tmp = pq.poll();
-			rqstTime += jobs[tmp][1];
-			System.out.println("rqstTime : " + rqstTime);
-			System.out.println("rqstTime - jobs[tmp][0] : " + (rqstTime - jobs[tmp][0]));
-			result += rqstTime - jobs[tmp][0];
-			System.out.println("result : " + result);
-		}
-		System.out.println("result / 3 : " + result % 3);
+		
+//		Arrays.sort(job, (a, b) -> {jobs[a][0] - jobs[b][0]});
+		
         return result / 3;
     }
 	public static void main(String[] args) {
