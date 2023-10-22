@@ -28,13 +28,15 @@ public class Level3_42627 {
 		Arrays.sort(jobs, Comparator.comparing(job -> job.start));
 		
 		Queue<Job> q = new LinkedList<>(Arrays.asList(jobs));
-		PriorityQueue<Job> pq = new PriorityQueue<Job>( Comparator.comparing(job -> job.start));
+		PriorityQueue<Job> pq = new PriorityQueue<Job>( Comparator.comparing(job -> job.duration));
 		
 		int exec = 0;
 		int time = 0;
 		
 		while(!q.isEmpty() || !pq.isEmpty()) {
-			pq.add(q.poll());
+			while(!q.isEmpty() && q.peek().start <= time) {
+				pq.add(q.poll());
+			}
 			
 			if (pq.isEmpty()) {
 				time = q.peek().start;
