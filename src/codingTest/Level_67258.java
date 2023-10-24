@@ -10,31 +10,60 @@ import java.util.Set;
 
 public class Level_67258 {
 	public int[] solution(String[] gems) {
+		int[] result = new int[] {1, 1};
 		// 보석을 종류 
 		Set<String> kind = new HashSet<>(Arrays.asList(gems));
-		if (kind.size() == 1) return new int[] {1, 1};
+		if (kind.size() == 1) return result ;
 		// 1 에 gems 추가
 		Queue<String> q_gems = new LinkedList<>(Arrays.asList(gems));
 		List<String> list_gems = new ArrayList<>();
+		Set<String> set_gems = new HashSet<>();
 		// 2. q 에 있는
-		
-		int start = 0;
-		int end = 0;
+		int start = 1;
+		int end = 1;
 		while (!q_gems.isEmpty()) {
-			// 
-			// q_result 에 추가시 end + 1, q_result에서 poll() 시 start + 1
+			// list_gem 에 기존 q에 들어있는 보석 후보 삽입
+			String gem = q_gems.poll();
+			list_gems.add(gem);
 			
-		}
+			// Set.copyOf 메서드를 통해 list에 있는 값이 kind의 갯수와 같을 경우 result 후보 
+			if (Set.copyOf(list_gems).size() == kind.size()) {
+				if (result[1] == 1) {
+					result[0] = start;
+					result[1] = end;
+				} else if ((result[1] - result[0]) > end - start) {
+					result[0] = start;
+					result[1] = end;
+				}
+			}
+						
+			end += 1;
+			System.out.println("end : " + end);
+			
+			if (list_gems.size() > 1) {
+				if (list_gems.get(0).equals(gem)) {
+					list_gems.remove(0);
+					start += 1;
+					System.out.println("start : " + start);
+				}
+				
+				while (list_gems.get(0).equals(list_gems.get(1))) {
+					list_gems.remove(0);
+					start += 1;
+					System.out.println("start : " + start);
+				}
+			}
+			
+ 		}
 		
-        int[] answer = {};
-        return answer;
+        return result;
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 //		/[]
 		String[] gems1 = new String[] {"DIA", "RUBY", "RUBY", "DIA", "DIA", "EMERALD", "SAPPHIRE", "DIA"};
 		Level_67258 cls = new Level_67258();
-		System.out.println();
+		System.out.println(cls.solution(gems1)[0] + "  " + cls.solution(gems1)[1]);
 	}
 
 }
