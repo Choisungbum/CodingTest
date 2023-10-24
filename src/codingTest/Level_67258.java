@@ -48,6 +48,7 @@ public class Level_67258 {
 				String tmp = dq_gems.pollFirst();
 				
 				while (dq_gems.size() > 1 && tmp.equals(dq_gems.peekFirst())) {
+					dq_gems.pollFirst();
 					start += 1;
 					System.out.println("start : " + start);
 				}
