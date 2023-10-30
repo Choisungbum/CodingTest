@@ -9,7 +9,7 @@ public class Level_12949 {
 		for (int i = 0; i < arr.length; i++) {
 			for (int j = 0; j < arr[i].length; j++) {
 				arr[i][j] = 0;
-				for (int k = 0; k < arr[i].length; k++) {
+				for (int k = 0; k < arr1[i].length; k++) {
 					arr[i][j] += arr1[i][k] * arr2[k][j];
 				}
 			}
@@ -23,12 +23,16 @@ public class Level_12949 {
 		int[][] arr2 = {{3, 3}, {3, 3}};
 		int[][] arr3 = {{2, 3, 2}, {4, 2, 4}, {3, 1, 4}};
 		int[][] arr4 = {{5, 4, 3}, {2, 4, 1}, {3, 1, 1}};
+		int[][] arr5 = {{5, 4}, {-2, 4}, {3, 1}};
+		int[][] arr6 = {{1, 2, 3}, {4, 5, 6}};
+		int[][] arr7 = {{1, 4}, {2, 5}, {3, 6}};
 		int[][] result = {};
-		result = Level_12949.solution(arr3, arr4);
+		result = Level_12949.solution(arr6, arr7);
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[i].length; j++) {
-				System.out.println(result[i][j]);
+				System.out.print(result[i][j] + " ");
 			}
+			System.out.println();
 		}
 	}
 
