@@ -1,94 +1,69 @@
 package codingTest;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class TestNote {
-	private static final int[] dx = {0, 1, 0, -1}; // 위 오른쪽 아래 왼쪽
-	private static final int[] dy = {-1, 0, 1, 0};
-	
-	private static boolean getCharPlace(String[] place) {
-		char[][] realPlace = new char[5][5];
-		
-		for (int i = 0; i < place.length; i++) {
-			int j = 0;
-			for (char p : place[i].toCharArray()) {
-				realPlace[i][j] = p;
-				j++;
+	private static int[] devideArr(int x, int y, int[][] arr, int n, int nx, int ny,int[] cnt) {
+		if (n == 1) {
+			if (arr[y][x] == 1) {
+				cnt[1] += 1;
+			} else {
+				cnt[0] += 1;
 			}
+			return cnt;
 		}
-		return isPerson(realPlace);
-	}
-	private static boolean isDistanced(char[][] realPlace, int x, int y, int exp) {
-		// 사람 근처에 테이블이 있을 경우 
-		int chk_x = 0;
-		int chk_y = 0;
 		
-		for (int l = 0; l < 4; l++) { // 위 오른쪽 아래 왼쪽
-			if ((exp + 2) % 4 == l) continue;
-			
-			chk_x = x + dx[l];
-			chk_y = y + dy[l];
-			
-			if (chk_x < 0 || chk_x > 4 || chk_y < 0 || chk_y > 4) continue; // 사무실 범위 밖으로 넘어갈시 continue
-			
-			if (realPlace[chk_y][chk_x] == 'P') {
-				return true;
-			} 
-		}
-		return false;
-	}
-	
-	private static boolean isPerson(char[][] realPlace) {
-		int x = 0;
-		int y = 0;
-		
-		for (int i = 0; i < realPlace.length; i++) {
-			for (int j = 0; j < realPlace[i].length; j++) {
-				if (realPlace[i][j] == 'P') {
-					for (int k = 0; k < 4; k++) { // 위 오른쪽 아래 왼쪽
-						x = j + dx[k];
-						y = i + dy[k];
-						
-						if (x < 0 || x > 4 || y < 0 || y > 4) continue; // 사무실 범위 밖으로 넘어갈시 continue
-						
-						switch(realPlace[y][x]) {
-						case 'P' : return true;
-						case 'O' : {
-								if (isDistanced(realPlace, x, y, k)) {
-									return true;
-								}
-							}
-						}
-					}
+		int tmp = arr[y][x];
+		int halfN = n / 2;
+		for (int i = y; i < ny; i++) {
+			for (int j = x; j < nx; j++) {
+				if (tmp != arr[i][j]) {
+					devideArr(x, y, arr, halfN, halfN, halfN, cnt); 								 // 1 사분면
+					devideArr(x + halfN, y, arr, halfN, halfN * 2, halfN, cnt); 				 // 2 사분면
+					devideArr(x, y + halfN, arr, halfN, halfN, halfN * 2, cnt); 				 // 3 사분면
+					devideArr(x + halfN, y + halfN, arr, halfN, halfN * 2, halfN * 2, cnt); // 4 사분면
+					return cnt;
 				} 
 			}
 		}
-		return false;
-	}
-	
-	
-	public int[] solution(String[][] places) {
-		int[] result = new int[5];
-		for (int i = 0; i < places.length; i++) {
-			if (getCharPlace(places[i])) {
-				result[i] = 0;
-			} else {
-				result[i] = 1;
-			}
-		}
 		
-		return result;
+		if (tmp == 1) {
+			cnt[1] += 1;
+		} else {
+			cnt[0] += 1;
+		}
+		return cnt;
 	}
+	public static int[] solution(int[][] arr) {
+		return devideArr(0, 0, arr, arr.length, arr.length, arr.length, new int[] {0,0});
+	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		final String[][] place = {{"POOOP", "OXXOX", "OPXPX", "OOXOX", "POXXP"}, {"POOPX", "OXPXP", "PXXXO", "OXXXO", "OOOPP"}, 
-				{"PXOPX", "OXOXP", "OXPOX", "OXXOP", "PXPOX"}, {"OOOXX", "XOOOX", "OOOXX", "OXOOX", "OOOOO"}, {"PXPXP", "XPXPX", "PXPXP", "XPXPX", "PXPXP"}};
-		
-		TestNote cls = new TestNote();
-		
-		int[] arr = cls.solution(place);
-		
-		for(int i = 0; i < arr.length; i++) {
-			System.out.println(arr[i]);
-		}
+		int[][] arr1 = {{1,1,0,0},
+						{1,0,0,0},
+						{1,0,0,1},
+						{1,1,1,1}};
+		int[][] arr2 = {{1,1,1,1,1,1,1,1},
+						{0,1,1,1,1,1,1,1},
+						{0,0,0,0,1,1,1,1},
+						{0,1,0,0,1,1,1,1},//  5, 5 나와야함
+						{0,0,0,0,0,0,1,1}, 
+						{0,0,0,0,0,0,0,1},
+						{0,0,0,0,1,0,0,1},
+						{0,0,0,0,1,1,1,1}};
+		int[][] arr3 = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};
+		int[][] arr4 = {{0,0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0,0},
+						{0,0,0,0,0,0,0,0}};
+		System.out.println(TestNote.solution(arr2)[0] + " "+ TestNote.solution(arr2)[1]);
+
 	}
 
 }
