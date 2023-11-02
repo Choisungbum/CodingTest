@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class TestNote {
-	private static int[] devideArr(int x, int y, int[][] arr, int n, int nx, int ny,int[] cnt) {
+		private static int[] devideArr(int x, int y, int[][] arr, int n, int nx, int ny,int[] cnt) {
 		if (n == 1) {
 			if (arr[y][x] == 1) {
 				cnt[1] += 1;
@@ -19,10 +19,10 @@ public class TestNote {
 		for (int i = y; i < ny; i++) {
 			for (int j = x; j < nx; j++) {
 				if (tmp != arr[i][j]) {
-					devideArr(x, y, arr, halfN, halfN, halfN, cnt); 								 // 1 사분면
-					devideArr(x + halfN, y, arr, halfN, halfN * 2, halfN, cnt); 				 // 2 사분면
-					devideArr(x, y + halfN, arr, halfN, halfN, halfN * 2, cnt); 				 // 3 사분면
-					devideArr(x + halfN, y + halfN, arr, halfN, halfN * 2, halfN * 2, cnt); // 4 사분면
+					devideArr(x, y, arr, halfN, x + halfN, y + halfN, cnt); 								 // 1 사분면
+					devideArr(x + halfN, y, arr, halfN, x + (halfN * 2), y + halfN, cnt); 				 // 2 사분면
+					devideArr(x, y + halfN, arr, halfN, x + halfN, y + (halfN * 2), cnt); 				 // 3 사분면
+					devideArr(x + halfN, y + halfN, arr, halfN, x + (halfN * 2), y + (halfN * 2), cnt); // 4 사분면
 					return cnt;
 				} 
 			}
@@ -45,14 +45,19 @@ public class TestNote {
 						{1,0,0,0},
 						{1,0,0,1},
 						{1,1,1,1}};
+		int[][] arr6 = {{0,1,0,0},
+						{1,0,0,0},
+						{1,0,0,0},
+						{1,1,1,1}};
 		int[][] arr2 = {{1,1,1,1,1,1,1,1},
 						{0,1,1,1,1,1,1,1},
 						{0,0,0,0,1,1,1,1},
-						{0,1,0,0,1,1,1,1},//  5, 5 나와야함
+						{0,1,0,0,1,1,1,1},//  5, 6 나와야함
 						{0,0,0,0,0,0,1,1}, 
 						{0,0,0,0,0,0,0,1},
-						{0,0,0,0,1,0,0,1},
+						{0,0,0,0,1,0,0,1}, // 6, 6/ 10, 15
 						{0,0,0,0,1,1,1,1}};
+		
 		int[][] arr3 = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};
 		int[][] arr4 = {{0,0,0,0,0,0,0,0},
 						{0,0,0,0,0,0,0,0},
