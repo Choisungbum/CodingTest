@@ -1,62 +1,96 @@
 package codingTest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 public class Level4_60060 {
-	private static class Node{
-		public Map<Character, Node> childNode = new HashMap<>();
-		boolean lastWord;
-	}
 	private static class TrieNode{
-		Node rootNode = new Node();
+		public Map<Integer, Integer> lenChildNode;
+		public Map<Character, TrieNode> childNode;
+		boolean lastWord;
 		
-		public void insert(String str) {
-			Node node = this.rootNode;
-			
-			for (int i = 0; i < str.length(); i++) {
-				char c = str.charAt(i);
-				
-				node = node.childNode.computeIfAbsent(c, key -> new Node());
+		public TrieNode() {
+			childNode = new HashMap<>();
+			lenChildNode = new HashMap<>();
+			lastWord = false;
+		}
+	}
+	private static class Trie{
+		private TrieNode root;
+		private int cnt;
+		
+		public Trie() {
+			root = new TrieNode();
+		}
+		
+		public void insert(String word) {
+			TrieNode node = root;
+			for (char c : word.toCharArray()) {
+				if (node.lenChildNode.containsKey(word.length())) {
+					int len = node.lenChildNode.get(word.length());
+					node.lenChildNode.replace(word.length(), len + 1);
+				} else {
+					node.lenChildNode.put(word.length(), 1);
+				}
+				node.childNode.putIfAbsent(c, new TrieNode());
+				System.out.println(word.length() + " " + node.lenChildNode.get(word.length()));
+				node = node.childNode.get(c);
 			}
 			node.lastWord = true;
 		}
 		
-		public boolean search(String str, int cnt) {
-			Node node = new Node();
-			for (int i = 0; i < str.length(); i++) {
-				char c = str.charAt(i);
+		public int search (String query, int cnt) {
+			TrieNode node = root;
+			int index = 0;
+			for (int i = 0 ;i < query.length(); i++) {
+				char c = query.charAt(i);
+				System.out.println(c);
 				
-				node = node.childNode.getOrDefault(c, null);
-				if (c == '?' && node.childNode.get(c) != null) {
-					continue;
+				
+				if (!node.childNode.containsKey(c)) {
+					return cnt;
 				}
-				if (node.childNode.get(c) == null) {
-					return false;
+				
+				node = node.childNode.get(c);
+				
+				if (i + 1 <= query.length() && query.charAt(i + 1) == '?') { // 다음 문자가 ? 일 경우 
+					index = i + 1;
+					break;
 				}
 			}
-			return node.lastWord;
+			return cnt;
 		}
+		
+		public boolean stattsWIth(String prefix) {
+			TrieNode node = root;
+			for (char c : prefix.toCharArray()) {
+				if (!node.childNode.containsKey(c)) {
+					return false;
+				}
+				node = node.childNode.get(c);
+			}
+			return true;
+		}
+		
 	}
 	
 	
 	public int[] solution(String[] words, String[] queries) {
-		String[] words1 = new String[] {"frodo", "front", "frost", "frozen", "frame", "kakao"};
-		String[] queries1 = new String[] {"fro??", "????o", "fr???", "fro???", "pro?"};
-		int[] answer = {};
+		int[] answer = new int[words.length];
+		Trie trie = new Trie();
 		
-		TrieNode trie = new TrieNode();
-		
-		for (String s : words1) {
+		for (String s : words) {
 			trie.insert(s);
+			System.out.println(s);
 		}
 		
-		for (String s : queries1) {
-			if (trie.search(s, 0)) {
-				
-			}
-			
+		for (int i = 0; i < queries.length;i++) {
+			answer[i] = (trie.search(queries[i], 0));
 		}
 		
 		
@@ -64,8 +98,16 @@ public class Level4_60060 {
         return answer;
     }
 	public static void main(String[] args) {
+		String[] words1 = new String[] {"frodo", "front", "frost", "frozen", "frame", "kakao"};
+		String[] queries1 = new String[] {"fro??", "????o", "fr???", "fro???", "pro?"};
+		String query = "fro??";
+		
 		// TODO Auto-generated method stub
-
+		Level4_60060 cls = new Level4_60060();
+		for (int i = 0 ;i < words1.length; i++) {
+			System.out.println(cls.solution(words1, queries1)[i]);
+			}
+		
 	}
 
 }
