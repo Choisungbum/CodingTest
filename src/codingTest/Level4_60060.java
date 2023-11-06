@@ -9,93 +9,55 @@ import java.util.Set;
 import java.util.Stack;
 
 public class Level4_60060 {
-	private static class TrieNode{
-		public Map<Integer, Integer> lenChildNode;
-		public Map<Character, TrieNode> childNode;
-		boolean lastWord;
+	private static class Node{
+		private final Map<Integer, Integer> terminals = new HashMap<>(); // ? 개수별로 완성되는 단어의 개수
+		private final Map<Character, Node> children = new HashMap<>(); // 자식 노드 
 		
-		public TrieNode() {
-			childNode = new HashMap<>();
-			lenChildNode = new HashMap<>();
-			lastWord = false;
-		}
-	}
-	private static class Trie{
-		private TrieNode root;
-		private int cnt;
-		
-		public Trie() {
-			root = new TrieNode();
-		}
-		
-		public void insert(String word) {
-			TrieNode node = root;
-			for (char c : word.toCharArray()) {
-				if (node.lenChildNode.containsKey(word.length())) {
-					int len = node.lenChildNode.get(word.length());
-					node.lenChildNode.replace(word.length(), len + 1);
-				} else {
-					node.lenChildNode.put(word.length(), 1);
-				}
-				node.childNode.putIfAbsent(c, new TrieNode());
-				System.out.println(word.length() + " " + node.lenChildNode.get(word.length()));
-				node = node.childNode.get(c);
+		private void add(String word, int offset) {
+			int length = word.length() - offset;
+			terminals.put(length, terminals.getOrDefault(length, 0) + 1);
+			
+			if (length > 0) {
+				char c = word.charAt(offset);
+				Node child = children.getOrDefault(c, new Node());
+				child.add(word, offset + 1);
+				children.put(c, child);
 			}
-			node.lastWord = true;
 		}
 		
-		public int search (String query, int cnt) {
-			TrieNode node = root;
-			int index = 0;
-			for (int i = 0 ;i < query.length(); i++) {
-				char c = query.charAt(i);
-				System.out.println(c);
-				
-				
-				if (!node.childNode.containsKey(c)) {
-					return cnt;
-				}
-				
-				node = node.childNode.get(c);
-				
-				if (i + 1 <= query.length() && query.charAt(i + 1) == '?') { // 다음 문자가 ? 일 경우 
-					index = i + 1;
-					break;
-				}
+		public int count(String query, int offset) {
+			if(query.charAt(offset) == '?') {
+				return terminals.getOrDefault(query.length() - offset, 0);
 			}
-			return cnt;
+			
+			char c = query.charAt(offset);
+			if (!children.containsKey(c)) return 0;
+			
+			return children.get(c).count(query, offset + 1);
+			
 		}
-		
-		public boolean stattsWIth(String prefix) {
-			TrieNode node = root;
-			for (char c : prefix.toCharArray()) {
-				if (!node.childNode.containsKey(c)) {
-					return false;
-				}
-				node = node.childNode.get(c);
-			}
-			return true;
-		}
-		
 	}
 	
+	private int count(String query, Node trie, Node reverseTrie) {
+		if (query.startsWith("?")) {
+			return reverseTrie.count(new StringBuilder(query).reverse().toString(), 0);
+		}
+		return trie.count(query, 0);
+	}
 	
 	public int[] solution(String[] words, String[] queries) {
 		int[] answer = new int[words.length];
-		Trie trie = new Trie();
+		Node trie = new Node();
+		Node reversedTrie = new Node();
 		
-		for (String s : words) {
-			trie.insert(s);
-			System.out.println(s);
+		for(String word : words) {
+			trie.add(word, 0);
+			reversedTrie.add(new StringBuilder(word).reverse().toString(), 0);
 		}
 		
-		for (int i = 0; i < queries.length;i++) {
-			answer[i] = (trie.search(queries[i], 0));
-		}
-		
-		
-        
-        return answer;
+        return Arrays.stream(queries)
+        		.mapToInt(query -> count(query, trie, reversedTrie))
+        		.toArray();
     }
 	public static void main(String[] args) {
 		String[] words1 = new String[] {"frodo", "front", "frost", "frozen", "frame", "kakao"};
