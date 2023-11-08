@@ -66,7 +66,7 @@ public class Level4_60060 {
 		
 		// TODO Auto-generated method stub
 		Level4_60060 cls = new Level4_60060();
-		for (int i = 0 ;i < words1.length; i++) {
+		for (int i = 0 ;i < queries1.length; i++) {
 			System.out.println(cls.solution(words1, queries1)[i]);
 			}
 		
