@@ -1,74 +1,40 @@
 package codingTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.List;
 
 public class TestNote {
-		private static int[] devideArr(int x, int y, int[][] arr, int n, int nx, int ny,int[] cnt) {
-		if (n == 1) {
-			if (arr[y][x] == 1) {
-				cnt[1] += 1;
-			} else {
-				cnt[0] += 1;
-			}
-			return cnt;
-		}
+	private final String[] wordSet = {"A", "E", "I", "O", "U"};
+	private List<String> wordSet (String word, int offset, List<String> listSet) {
+		listSet.add(word);
+		if (word.length() == 5) return listSet;
 		
-		int tmp = arr[y][x];
-		int halfN = n / 2;
-		for (int i = y; i < ny; i++) {
-			for (int j = x; j < nx; j++) {
-				if (tmp != arr[i][j]) {
-					devideArr(x, y, arr, halfN, x + halfN, y + halfN, cnt); 								 // 1 사분면
-					devideArr(x + halfN, y, arr, halfN, x + (halfN * 2), y + halfN, cnt); 				 // 2 사분면
-					devideArr(x, y + halfN, arr, halfN, x + halfN, y + (halfN * 2), cnt); 				 // 3 사분면
-					devideArr(x + halfN, y + halfN, arr, halfN, x + (halfN * 2), y + (halfN * 2), cnt); // 4 사분면
-					return cnt;
-				} 
-			}
+		for (String s : wordSet) {
+				wordSet(word + s, offset + 1, listSet);
 		}
+		return listSet;
+	}
+	public int solution(String word) {
+		List<String> strList = wordSet("",0, new ArrayList<>());
+		System.out.println(strList.size());
 		
-		if (tmp == 1) {
-			cnt[1] += 1;
-		} else {
-			cnt[0] += 1;
-		}
-		return cnt;
-	}
-	public static int[] solution(int[][] arr) {
-		return devideArr(0, 0, arr, arr.length, arr.length, arr.length, new int[] {0,0});
-	}
+        return Arrays.asList(strList).indexOf(word);
+    }
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int[][] arr1 = {{1,1,0,0},
-						{1,0,0,0},
-						{1,0,0,1},
-						{1,1,1,1}};
-		int[][] arr6 = {{0,1,0,0},
-						{1,0,0,0},
-						{1,0,0,0},
-						{1,1,1,1}};
-		int[][] arr2 = {{1,1,1,1,1,1,1,1},
-						{0,1,1,1,1,1,1,1},
-						{0,0,0,0,1,1,1,1},
-						{0,1,0,0,1,1,1,1},//  5, 6 나와야함
-						{0,0,0,0,0,0,1,1}, 
-						{0,0,0,0,0,0,0,1},
-						{0,0,0,0,1,0,0,1}, // 6, 6/ 10, 15
-						{0,0,0,0,1,1,1,1}};
-		
-		int[][] arr3 = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};
-		int[][] arr4 = {{0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0}};
-		System.out.println(TestNote.solution(arr2)[0] + " "+ TestNote.solution(arr2)[1]);
-
+		TestNote cls = new TestNote();
+//		System.out.println(cls.solution("I"));
+//		for(String s : "AE".split("")) {
+//			System.out.println("s : " + s);
+//		}
+		System.out.println(cls.solution("I"));
+		String[] str1 = new String[] {"AA", "E","AE"};
+		Arrays.sort(str1);
+		for  (String s : str1) {
+			System.out.println(s);
+		}
 	}
 
 }

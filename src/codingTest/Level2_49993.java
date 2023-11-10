@@ -1,7 +1,29 @@
 package codingTest;
 
+import java.util.Arrays;
+
 public class Level2_49993 {
-	private boolean matchString (String skill, String str) {
+	
+	public int solution(String skill, String[] skill_trees) {
+		return (int)Arrays.stream(skill_trees)
+					.map(s -> s.replaceAll("[^" + skill + "]", ""))
+					.filter(skill::startsWith)
+					.count();
+    }
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String skill = "CBD";
+		String[] skill_trees = new String[] {"BACDE", "CBADF", "AECB", "BDA"};
+		
+		Level2_49993 cls = new Level2_49993();
+		System.out.println(cls.solution(skill, skill_trees));
+	}
+
+}
+
+
+/*
+private boolean matchString (String skill, String str) {
 		int matchChar = 0; // skillset 에 있는 skill 수 
 		
 		for (char c : str.toCharArray()) { 
@@ -29,13 +51,5 @@ public class Level2_49993 {
         
         return answer;
     }
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		String skill = "CBD";
-		String[] skill_trees = new String[] {"BACDE", "CBADF", "AECB", "BDA"};
-		
-		Level2_49993 cls = new Level2_49993();
-		System.out.println(cls.solution(skill, skill_trees));
-	}
-
-}
+ * */
+ 
