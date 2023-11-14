@@ -6,58 +6,43 @@ import java.util.List;
 import java.util.Stack;
 
 public class Level2_43165 {
-	private static class Node {
-		int value = 0;
-		int depth = 0;
-		Node parent = null;
-		Node right;
-		Node left;
+	private static class State {
+		public final int index;
+		public final int acc;
 		
-		public Node (int value) {
-			this.value = value;
+		public State (int index, int acc) {
+			this.index = index;
+			this.acc = acc;
 		}
-		
-		private Node root() {
-			if (parent == null) return this;
-			return parent.root();
-		}
-		
-		
-		
 	}
+	
 	public int solution(int[] numbers, int target) {
-		boolean[] isVisited = new boolean[numbers.length + 1];
-		Stack<Integer> stack = new Stack<>();
+		Stack<State> s = new Stack<>();
+		s.push(new State(0, 0));
+		int count = 0;
 		
-		stack.add(0);
-		int index = 0;
-//		while (!stack.isEmpty()) {
-//			int state = stack.pop();
-//			System.out.println("state : " + state);
-//			
-//			if (isVisited[state]) continue;
-//			isVisited[state] = true;
-//			
-//			for (int i = 1; i < numbers.length; i++) {
-//				if (i == numbers.length - 1) {
-////					list.add()
-//				}
-//				stack.push(i);
-//			}
+		while(!s.isEmpty()) {
+			State state = s.pop();
 			
+			if (state.index == numbers.length) {
+				if (state.acc == target) count++;
+				continue;
+			}
 			
-//		}
+			// + 를 선택한 경우
+			s.push(new State(state.index + 1, state.acc + numbers[state.index]));
+			// - 를 선택한 경우
+			s.push(new State(state.index + 1, state.acc - numbers[state.index]));
+		}
 		
-		
-        int answer = 0;
-        return answer;
+        return count;
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int[] numbers1 = new int[] {1, 1, 1, 1, 1};
 		int target1 = 3;
 		Level2_43165 cls = new Level2_43165();
-		cls.solution(numbers1, target1);
+		System.out.println(cls.solution(numbers1, target1));
 	}
 
 }
