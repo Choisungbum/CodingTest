@@ -18,18 +18,6 @@ public class Level3_1844 {
 		System.out.println("====================");
 	}
 	
-	public int countVisited (boolean[][] isVisited) {
-		int count = 0;
-		for (boolean[] b : isVisited) {
-			for (boolean bb : b) {
-				if (bb) {
-					count++;
-				}
-			}
-		}
-		return count;
-	}
-	
 	private static class State{
 		private int y;
 		private int x;
@@ -60,7 +48,6 @@ public class Level3_1844 {
 			
 			// 종료 조건 
 			if (state.y == (maps.length - 1) && state.x == (maps[0].length - 1)) {
-//				return countVisited(isVisited);
 				return state.depth;
 			}
 			
