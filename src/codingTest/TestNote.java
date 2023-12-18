@@ -1,40 +1,69 @@
 package codingTest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 
 public class TestNote {
-	private final String[] wordSet = {"A", "E", "I", "O", "U"};
-	private List<String> wordSet (String word, int offset, List<String> listSet) {
-		listSet.add(word);
-		if (word.length() == 5) return listSet;
+	private static class State{
 		
-		for (String s : wordSet) {
-				wordSet(word + s, offset + 1, listSet);
-		}
-		return listSet;
 	}
-	public int solution(String word) {
-		List<String> strList = wordSet("",0, new ArrayList<>());
-		System.out.println(strList.size());
+	public int solution(int n, int[][] computers) {
+		boolean[][] isVisited = new boolean[n][n];
+		Set<String> result = new HashSet<>();
 		
-        return Arrays.asList(strList).indexOf(word);
-    }
+		Stack<Integer> stack = new Stack<>();
+		
+		for (int i = 0; i < computers.length; i++) {
+			stack.clear();
+			stack.push(i);
+			
+			while (!stack.isEmpty()) {
+				int index = stack.pop();
+				
+				for (int j = 0; j < n; j++) {
+					if (computers[index][j] == 1) {
+						if (isVisited[index][j]) {
+							isVisited[index][j] = true;
+							continue;
+						}
+						isVisited[index][j] = true;
+						
+						if (index == j) continue;
+
+						stack.push(j);
+					}
+				}
+			}
+		}
+		
+		for (int i = 0; i < n; i++) {
+			result.add( Arrays.toString(isVisited[i]));
+			System.out.println(Arrays.toString(isVisited[i]));
+		}
+		 
+		
+		return result.size();
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		TestNote cls = new TestNote();
-//		System.out.println(cls.solution("I"));
-//		for(String s : "AE".split("")) {
-//			System.out.println("s : " + s);
-//		}
-		System.out.println(cls.solution("I"));
-		String[] str1 = new String[] {"AA", "E","AE"};
-		Arrays.sort(str1);
-		for  (String s : str1) {
-			System.out.println(s);
-		}
+		int n1 = 3;
+		int n2 = 4;
+		int[][] computers1 = new int[][] {{1, 1, 0}
+										, {1, 1, 0}
+										, {0, 0, 1}};
+		int[][] computers2 = new int[][] {{1, 1, 0}
+										, {1, 1, 1}
+										, {0, 1, 1}}; 
+		int[][] computers3 = new int[][] {{1, 0, 1, 0}
+										, {0, 1, 0, 1}
+										, {1, 0, 1, 0}
+										, {0, 1, 0, 1}};
+		System.out.println(cls.solution(n2, computers3));
+		
 	}
 
 }
