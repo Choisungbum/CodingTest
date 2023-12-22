@@ -1,52 +1,46 @@
 package codingTest;
 
-import java.util.Stack;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Level3_42884 {
 	public int solution(int[][] routes) {
-		boolean[][] isVisited = new boolean[routes.length][routes.length];
-		Stack<Integer> stack = new Stack<>();
 		
-		for (int i = 0; i < routes.length; i++) {
-			stack.push(i);
-			
-			while(!stack.isEmpty()) {
-				int state = stack.pop();
-				
-				for(int j = 0; j < routes.length; j++) {
-					if (isVisited[state][j]) continue;
-					
-					if (state == j) {
-						isVisited[state][j] = true;
-						continue;
-					}
-					
-					if ((routes[state][0] <= routes[j][0] && routes[state][1] >= routes[j][0]) 
-							|| (routes[state][0] <= routes[j][1] && routes[state][1] >= routes[j][1])) {
-						isVisited[state][j] = true;
-						System.out.println("isVisited[" + state + "][" + j + "] : " + isVisited[state][j]);
-						stack.push(j);
-					}
-				}
-			}
+		Arrays.sort(routes, Comparator.comparing(route -> route[1]));
+		int last = Integer.MIN_VALUE;
+		int count = 0;
+		
+		for (int[] route : routes) {
+			if (last >= route[0] && last <= route[1]) continue;
+			last = route[1];
+			count++;
 		}
-		System.out.println(isVisited.toString());
 		
-        int answer = 0;
-        return answer;
+		
+		return count;
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		 int[][] routes = {{-20,-15}
+		 int[][] routes1 = {{-20,-15}
 		 				 , {-14,-5}
 		 				 , {-18,-13}
 		 				 , {-5,-3}};
-		 [[true, false, true, false], 
-		  [false, true, true, true], 
-		  [true, true, true, false], 
-		  [false, true, false, true]]
+		 
+		 int[][] routes2 = {{-20,-13}
+						 , {-18,-15}
+						 , {-12,-5}
+						 , {-5,-3}};
+		 int[][] routes3 = {{0,5}
+						 , {2,8}
+						 , {4,10}
+						 , {9,13}};
+//		 [[true, false, true, false], 
+//		  [false, true, true, true], 
+//		  [true, true, true, false], 
+//		  [false, true, false, true]]
+		 // SEt에 해당 연결관계 넣고 Set사이즈랑 총 하나하나 크기 빼고 Set에 다 안들어 갈 경우 그 수 많큼 추가 필요 e
 		 Level3_42884 cls = new Level3_42884();
-		 cls.solution(routes);
+		 System.out.println("result : " + cls.solution(routes1));
 	}
 
 }
